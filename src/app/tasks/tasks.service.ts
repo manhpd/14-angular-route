@@ -64,4 +64,8 @@ export class TasksService {
   private saveTasks() {
     localStorage.setItem('tasks', JSON.stringify(this.tasks()));
   }
+
+  getUserTasks(userId: string) {
+    return this.allTasks().filter((task) => task.userId === userId);
+  }
 }
