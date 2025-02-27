@@ -8,3 +8,15 @@ ul {
   max-height: 50vh;
   overflow: auto;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+a:active {
+  color: #000;
+}
