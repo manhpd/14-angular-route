@@ -64,16 +64,4 @@ export class TasksService {
   private saveTasks() {
     localStorage.setItem('tasks', JSON.stringify(this.tasks()));
   }
-
-  getUserTasks(userId: string, order: string = 'asc') {
-    if(order === 'asc') {
-      return this.allTasks().filter((task) => task.userId === userId).sort((a, b) => {
-        return a.dueDate > b.dueDate ? 1 : -1;
-      });
-    } else {
-      return this.allTasks().filter((task) => task.userId === userId).sort((a, b) => {
-        return a.dueDate < b.dueDate ? 1 : -1;
-      });
-    }
-  }
 }

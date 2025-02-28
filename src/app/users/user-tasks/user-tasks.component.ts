@@ -1,6 +1,14 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, OnInit, inject, input } from '@angular/core';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  RouterLink,
+  RouterOutlet,
+  RouterStateSnapshot,
+} from '@angular/router';
+
 import { UsersService } from '../users.service';
-import { ActivatedRouteSnapshot, ResolveFn, RouterLink, RouterOutlet, RouterStateSnapshot } from '@angular/router';
 
 @Component({
   selector: 'app-user-tasks',
@@ -10,18 +18,34 @@ import { ActivatedRouteSnapshot, ResolveFn, RouterLink, RouterOutlet, RouterStat
   styleUrl: './user-tasks.component.css',
 })
 export class UserTasksComponent {
-  userId = input.required<string>();
   userName = input.required<string>();
+  message = input.required<string>();
+  // private activatedRoute = inject(ActivatedRoute);
+
+  // ngOnInit(): void {
+  //   this.activatedRoute.data.subscribe({
+  //     next: data => {
+  //       console.log(data);
+  //     }
+  //   })
+  // }
 }
 
-export const resolveUserName: ResolveFn<string> = (activatedRoute: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot) => {
+export const resolveUserName: ResolveFn<string> = (
+  activatedRoute: ActivatedRouteSnapshot,
+  routerState: RouterStateSnapshot
+) => {
   const usersService = inject(UsersService);
-  const userId = activatedRoute.paramMap.get('userId');
-  const userName = userId ? usersService.getUserName(userId) : 'Unknown';
-  return userName ? userName : Promise.resolve('Unknown');
-}
+  const userName =
+    usersService.users.find(
+      (u) => u.id === activatedRoute.paramMap.get('userId')
+    )?.name || '';
+  return userName;
+};
 
-export const resolveTitle: ResolveFn<string> = (activatedRoute: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot) => {
-  const title = resolveUserName(activatedRoute, routerStateSnapshot) + "'s Tasks";
-  return title ? title : Promise.resolve('Unknown');
+export const resolveTitle: ResolveFn<string> = (
+  activatedRoute,
+  routerState
+) => {
+  return resolveUserName(activatedRoute, routerState) + '\'s Tasks'
 }
